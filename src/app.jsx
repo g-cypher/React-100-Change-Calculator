@@ -4,16 +4,17 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      due: ' ',
-      received: ' ',
-      twenties: 0,
-      tens: 0,
-      fives: 0,
-      ones: 0,
-      quarters: 0,
-      dimes: 0,
-      nickels: 0,
-      pennies: 0
+      amountDue: ' ',
+      amountReceived: ' ',
+      twenties: '0',
+      tens: '0',
+      fives: '0',
+      ones: '0',
+      quarters: '0',
+      dimes: '0',
+      nickels: '0',
+      pennies: '0',
+      totalChange: ' '
     };
     this.handleChange = this.handleChange.bind(this);
     this.calculateChange = this.calculateChange.bind(this);
@@ -22,18 +23,22 @@ class App extends Component {
     this.setState({ [event.target.name]: event.target.value });
   }
 
-  calculateChange(due, received) {
-    const amountGiven = Number(received * 100);
-    const amountDue = Number(due * 100);
-    let answerTotal = amountGiven - amountDue;
-    // Need to setState of alert with answerTotal value here divided by 100 to get total change due
+  calculateChange(amountDue, amountReceived) {
+    const given = Number(amountReceived * 100);
+    const due = Number(amountDue * 100);
+    let answerTotal = given - due;
+    const changeDue = '$' + (answerTotal / 100);
+    this.setState({ totalChange: changeDue });
 
     if (answerTotal >= 2000) {
       const twenty = Math.floor(answerTotal / 2000);
       answerTotal %= 2000;
       this.setState({ twenties: twenty });
     } else {
-      this.setState({ tewenties: 0 });
+      this.setState({ twenties: 0 });
+      // eslint-disable-next-line no-undef
+      // eslint-disable-next-line no-console
+      console.log(typeof twenties);
     }
     if (answerTotal >= 1000) {
       const ten = Math.floor(answerTotal / 1000);
@@ -41,6 +46,8 @@ class App extends Component {
       this.setState({ tens: ten });
     } else {
       this.setState({ tens: 0 });
+      // eslint-disable-next-line no-console
+      console.log(typeof tens);
     }
     if (answerTotal >= 500) {
       const five = Math.floor(answerTotal / 500);
@@ -89,8 +96,8 @@ class App extends Component {
   render() {
     return (
     <div>
-      <h2 className='Title'>Change Calculator</h2>
-
+      <h2 className='Title text-light'>Change Calculator</h2>
+      <div className='page-header'></div>
       
         <div className='row'>
           <div className='col-sm-4'>
@@ -102,13 +109,13 @@ class App extends Component {
                 
                   <div className='form-group'>
                     <label htmlFor='inputDue'>How much is due?</label>
-                    <input type='number' className='form-control' name='due' value={ this.state.due } onChange={ this.handleChange }id='inputDue' placeholder='Enter Amount Due' />
+                    <input type='number' className='form-control' name='amountDue' value={ this.state.amountDue } onChange={ this.handleChange }id='inputDue' placeholder='Enter Amount Due' />
                   </div>
                   <div className='form-group'>
                     <label htmlFor='receivedInput'>How much was received?</label>
-                    <input type='number' className='form-control' name='received' value={ this.state.received } onChange={ this.handleChange }id='receivedInput' placeholder='Enter Amount Received' />
+                    <input type='number' className='form-control' name='amountReceived' value={ this.state.amountReceived } onChange={ this.handleChange }id='receivedInput' placeholder='Enter Amount Received' />
                   </div>
-                  <button type='submit' name='calcButton'className='btn btn-primary' onClick={ () => this.calculateChange(this.state.due, this.state.received, this.state.twenties) }>Calculate</button>
+                  <button type='submit' name='calcButton'className='btn btn-primary btn-lg btn-block' onClick={ () => this.calculateChange(this.state.amountDue, this.state.amountReceived) }>Calculate</button>
                   
             
               </div>
@@ -120,8 +127,8 @@ class App extends Component {
               <div className='card-body'>
                 <div className='row text-center'>
                     <div className='col'>
-                      <div className='alert alert-success' role='alert'>
-                        <strong>Well done!</strong> You successfully read this important alert message.
+                      <div className='alert alert-success' value={ this.handleChange }role='alert'>
+                        The total change due is {this.state.totalChange}
                     </div>
                   </div>
                 </div>
@@ -132,7 +139,7 @@ class App extends Component {
                     <div className='card bg-light'>
                     <div className='card-body'>
                       <h5 className='text-center'>Twenties</h5>
-                      <p name='Twenties' className='text-center' onChange={ this.handleChange }>{ this.state.twenties }</p>
+                      <p name='Twenties' className='text-center change' onChange={ this.handleChange }>{ this.state.twenties }</p>
                     </div>
                     </div>
                   </div>  
@@ -141,7 +148,7 @@ class App extends Component {
                     <div className='card bg-light'>
                       <div className='card-body'>
                         <h5 className='text-center'>Tens</h5>
-                        <p name='Tens' className='text-center' onChange={ this.handleChange }>{this.state.tens}</p>
+                        <p name='Tens' className='text-center change' onChange={ this.handleChange }>{this.state.tens}</p>
                       </div>
                     </div>
                   </div>
@@ -149,7 +156,7 @@ class App extends Component {
                     <div className='card bg-light'>
                       <div className='card-body'>
                         <h5 className='text-center'>Fives</h5>
-                        <p name='Fives' className='text-center' onChange={ this.handleChange }>{ this.state.fives }</p>
+                        <p name='Fives' className='text-center change' onChange={ this.handleChange }>{ this.state.fives }</p>
                       </div>
                     </div>
                   </div>
@@ -157,7 +164,7 @@ class App extends Component {
                     <div className='card bg-light'>
                       <div className='card-body'>
                         <h5 className='text-center'>Ones</h5>
-                        <p name='Ones' className='text-center' onChange={ this.handleChange }>{ this.state.ones }</p>
+                        <p name='Ones' className='text-center change' onChange={ this.handleChange }>{ this.state.ones }</p>
                       </div>
                     </div>
                   </div>
@@ -169,7 +176,7 @@ class App extends Component {
                     <div className='card bg-light'>
                       <div className='card-body'>
                         <h5 className='text-center'>Quarters</h5>
-                        <p name='Quarters' className='text-center' onChange={ this.handleChange }>{ this.state.quarters }</p>
+                        <p name='Quarters' className='text-center change' onChange={ this.handleChange }>{ this.state.quarters }</p>
                       </div>
                     </div>
                   </div>
@@ -177,7 +184,7 @@ class App extends Component {
                     <div className='card bg-light'>
                       <div className='card-body'>
                         <h5 className='text-center'>Dimes</h5>
-                        <p name='Dimes' className='text-center' onChange={ this.handleChange }>{ this.state.dimes }</p>
+                        <p name='Dimes' className='text-center change' onChange={ this.handleChange }>{ this.state.dimes }</p>
                       </div>
                     </div>
                   </div>
@@ -185,7 +192,7 @@ class App extends Component {
                     <div className='card bg-light'>
                       <div className='card-body'>
                         <h5 className='text-center'>Nickels</h5>
-                        <p name='Nickels' className='text-center' onChange={ this.handleChange }>{ this.state.nickels }</p>
+                        <p name='Nickels' className='text-center change' onChange={ this.handleChange }>{ this.state.nickels }</p>
                       </div>
                     </div>
                   </div>
@@ -193,7 +200,7 @@ class App extends Component {
                     <div className='card bg-light'>
                       <div className='card-body'>
                         <h5 className='text-center'>Pennies</h5>
-                        <p name='Pennies' className='text-center' onChange={ this.handleChange }>{ this.state.pennies }</p>
+                        <p name='Pennies' className='text-center change' onChange={ this.handleChange }>{ this.state.pennies }</p>
                       </div>
                     </div>
                   </div>
